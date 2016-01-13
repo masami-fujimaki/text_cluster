@@ -39,10 +39,16 @@ class Database:
             its.append(news.find_one({'_id':it}))
         return its
 
-    def dictionary_category_words(self, category):
+    def dictionary_category_nouns(self, category):
         dictionary = Database.db[category]
         words = dictionary.count()
-        word = dictionary.find({'feature':{'$nin': self._nin_features()}}).sort('count',DESCENDING)
+        word = dictionary.find(
+            { '$and': [
+                {'feature':{'$nin': self._nin_features()}}, 
+                {'$where':"this.noun.length > 1"},
+                {'count':{'$gte':100}}
+                ]
+            }).sort('count',DESCENDING)
         return word
 
 

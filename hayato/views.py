@@ -41,7 +41,7 @@ def world(request):
     dic_id = request.GET.get("id")
     category = 'world'
     db = Database()
-    dictionary = db.dictionary_category_words(category)
+    dictionary = db.dictionary_category_nouns(category)
     if dic_id:
         news = db.dictionary_category_news(category, dic_id)
     else:
