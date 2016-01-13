@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Hayato{% endblock title %}
+{% block extrahead %}
+<style>
+.current a{
+    color: red;
+}
+
+.hilight {
+    color: blue;
+    font-weight: bold;
+}
+
+</style>
+<script>
+  var printnews = function(text) {
+    text = text.replace(/\{\{(.*?)\}\}/g, '<span class="hilight">$1</span>');
+    text = text.replace(/\n/g, '<br/>');
+    return text;
+  };
+
+  $(function(){
+
+    $("#{{dic_id}}").detach().prependTo('.dictionaries');
+
+    $(".news .title a").on('click', function(){
+      $.getJSON(
+        "news",
+        { news_id: $(this).parents(".news").attr("id"),
+            dic_id: $("#dic-id").val(), category: $("#category").val() }
+      )
+      .done(function(data){
+        console.log(data);
+        $(".news .text").empty();
+        $("#"+data.id+" .text").html(printnews(data.text));
+        $(".news .url").empty();
+        var a = $("<a>").attr("href", data.url).text(data.url);
+        $("#"+data.id+" .url").html("url: "+a.prop('outerHTML'));
+        $(".news .noun").empty();
+        var nouns = [];
+        $.each(data.noun, function(i, e){ nouns.push(e.noun+"["+e.feature+"]"); })
+        $("#"+data.id+" .noun").text(nouns.join(" / "));
+      });
+
+      return false;
+    });
+  });
+</script>
+{% endblock extrahead %}
+
+{% load appname_tags %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-3 dictionaries">
+    {% for it in dictionary %}
+      <div class="dictionay" id="{{it|mongo_id}}">
+      {% if dic_id == it|mongo_id %}
+        <p class="current"><a href="{{category}}?id={{it|mongo_id}}">{{it.noun}}({{it.count}})</a></p>
+      {% else %}
+        <p><a href="{{category}}?id={{it|mongo_id}}">{{it.noun}}({{it.count}})</a></p>
+      {% endif %}
+      </div>
+    {% endfor %}
+    </div>
+    <div class="col-md-9">
+      {% for it in news %}
+      <div class="news" id="{{it|mongo_id}}">
+        <p class="title"><a href="#">{{ it.title }}</a></p>
+        <p class="text"></p>
+        <p class="url"></p>
+        <p class="noun"></p>
+      </div>
+      {% endfor %}
+    </div>
+    <div>
+      <input type="hidden" id="category" value="{{category}}"/>
+      <input type="hidden" id="dic-id" value="{{dic_id}}"/>
+    </div>
+  </div>
+{% endblock content %}

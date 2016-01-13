@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Hayato{% endblock title %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-3">
+      <div class="form-group">
+        <div id="datepicker"></div>
+      </div>
+      <div class="btn-group-vertical  btn-group-lg" role="group" aria-label="...">
+      {% for it in categories %}
+        {% if category == it %}
+        <button type="button" class="btn btn-success btn-category">{{ it }}</button>
+        {% else %}
+        <button type="button" class="btn btn-default btn-category">{{ it }}</button>
+        {% endif %}
+      {% endfor %}
+      </div>
+    </div>
+    <div class="col-md-9">
+    </div>
+  </div>
+{% endblock content %}
