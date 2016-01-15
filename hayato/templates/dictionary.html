@@ -26,7 +26,7 @@
 
     $(".news .title a").on('click', function(){
       $.getJSON(
-        "news",
+        "/hayato/news",
         { news_id: $(this).parents(".news").attr("id"),
             dic_id: $("#dic-id").val(), category: $("#category").val() }
       )
@@ -56,9 +56,9 @@
     {% for it in dictionary %}
       <div class="dictionay" id="{{it|mongo_id}}">
       {% if dic_id == it|mongo_id %}
-        <p class="current"><a href="{{category}}?id={{it|mongo_id}}">{{it.noun}}({{it.count}})</a></p>
+        <p class="current"><a href="/hayato/category/{{category}}/{{it|mongo_id}}">{{it.noun}}({{it.count}})</a></p>
       {% else %}
-        <p><a href="{{category}}?id={{it|mongo_id}}">{{it.noun}}({{it.count}})</a></p>
+        <p><a href="/hayato/category/{{category}}/{{it|mongo_id}}">{{it.noun}}({{it.count}})</a></p>
       {% endif %}
       </div>
     {% endfor %}

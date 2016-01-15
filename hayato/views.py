@@ -31,15 +31,13 @@ def news(request):
             'id': news_id,
             'text': _text(e['text'], dic['noun']), 
             'url': e['url'],
-            'noun': mecab.get_news_noun(e['text']),
+            'noun': e['nouns'],
             }
         return HttpResponse(json.dumps(news))
     else:
         return HttpResponse(None)
 
-def world(request):
-    dic_id = request.GET.get("id")
-    category = 'world'
+def category(request, category, dic_id=None):
     db = Database()
     dictionary = db.dictionary_category_nouns(category)
     if dic_id:
@@ -57,7 +55,6 @@ def world(request):
         },
         context_instance=RequestContext(request)
     )
-
 
 def _categories() :
     return ["economy","politics","world","sports","entertainments","life"];

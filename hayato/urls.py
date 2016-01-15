@@ -5,6 +5,7 @@ from hayato import views
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
-    url(r'^world', views.world, name='world'),
+    url(r'^category/(.*)/$', views.category, name='category'),
+    url(r'^category/(.*)/(.*)$', views.category, name='category'),
     url(r'^news', views.news, name='news'),
 )
